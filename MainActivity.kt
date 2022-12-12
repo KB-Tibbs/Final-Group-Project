@@ -13,6 +13,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var wordBox: TextView? = null
+    private var score_show: TextView? = null
     private var guess: EditText? = null
     private var begin: Button? = null
     private var submit: Button? = null
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         wordBox = findViewById<View>(R.id.wordBox) as TextView
+        score_show = findViewById(R.id.score_show) as TextView
         guess = findViewById<View>(R.id.guess) as EditText
         submit = findViewById<View>(R.id.submit) as Button
         submit!!.setOnClickListener(this)
@@ -58,6 +60,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         return new
     }
+    //Increases the Score for the Correct Answers
+    fun plusOne(int: Int?): String {
+
+        val numGuess = guess!!.text.toString()
+        val newScore = score.toString()
+
+        if(correctAnswer == numGuess ){
+            score++
+        }
+
+        return newScore
+    }
 
     //Resets game
     fun begin() {
@@ -65,14 +79,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val Ang: String? = mixWrds(mix)
         wordBox!!.setText(Ang)
         guess!!.setText("")
-        score = 0
+        val newScore: String? = plusOne(score)
+        score_show!!.setText(newScore)
         tries = 3
     }
-
-    /* fun next() {
-       correctAnswer = ranWrd()
-       val Ang: String? =
-     */
 
 
 
@@ -81,8 +91,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val userWrd = guess!!.text.toString()
         tries--
         if (correctAnswer == userWrd) {
-            score++
+
             Toast.makeText(this, "That's correct", Toast.LENGTH_SHORT).show()
+            plusOne(score)
+
         } else if(correctAnswer != userWrd) {
             Toast.makeText(this, "Incorrect, you have $tries tries left", Toast.LENGTH_SHORT).show()
 
@@ -101,10 +113,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         else if(view == begin){
             begin()
         }
-       /* else if(view == submit && tries ==0){
-            begin()
-            submit!!.isInvisible
-        }*/
+
     }
 
 }
